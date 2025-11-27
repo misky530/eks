@@ -1,0 +1,26 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: iot-platform
+  region: us-east-1
+
+managedNodeGroups:
+  - name: workers
+    instanceType: t3.small # 2核2G，Free Tier支持
+    desiredCapacity: 2
+    minSize: 1
+    maxSize: 3
+    volumeSize: 30
+    volumeType: gp3
+    spot: false # 不用Spot，避免问题
+
+    labels:
+      role: worker
+      environment: dev
+
+    iam:
+      withAddonPolicies:
+        ebs: true
+        albIngress: true
+        cloudWatch: true
