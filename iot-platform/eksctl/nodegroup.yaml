@@ -7,13 +7,13 @@ metadata:
 
 managedNodeGroups:
   - name: workers
-    instanceType: t3.small # 2核2G，Free Tier支持
-    desiredCapacity: 2
+    instanceType: t3.small
+    desiredCapacity: 3 # 改为3个节点
     minSize: 1
-    maxSize: 3
+    maxSize: 4
     volumeSize: 30
     volumeType: gp3
-    spot: false # 不用Spot，避免问题
+    spot: false
 
     labels:
       role: worker
