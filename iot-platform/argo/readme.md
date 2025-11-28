@@ -73,3 +73,9 @@ kubectl logs -n iot-bridge -l app=mqtt-kafka-bridge -f
 ltime/tenant123/#"}
 {"level":"info","ts":1764303914.2803807,"caller":"bridge/main.go:107","msg":"Connected to MQTT broker"}
 {"level":"info","ts":1764303914.5329292,"caller":"bridge/main.go:137","msg":"Successfully subscribed to MQTT topic"}
+
+---
+# 测试从 bridge pod 到 Kafka 的连接
+kubectl exec -n iot-bridge mqtt-kafka-bridge-764d597586-cbqw2 -- \
+  nc -zv iot-cluster-kafka-bootstrap.kafka 9092
+iot-cluster-kafka-bootstrap.kafka (172.20.45.126:9092) open
