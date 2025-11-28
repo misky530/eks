@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: iot-bridge
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-kafka-bridge
+  namespace: iot-bridge
+  labels:
+    app: mqtt-kafka-bridge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqtt-kafka-bridge
+  template:
+    metadata:
+      labels:
+        app: mqtt-kafka-bridge
+      annotations:
+        prometheus.io/scrape: "false"  # 暂不启用监控
+    spec:
+      containers:
+      - name: bridge
+        image: 645890933537.dkr.ecr.us-east-1.amazonaws.com/mqtt-kafka-bridge/mqtt-kafka-bridge:latest
+        imagePullPolicy: Always
+        env:
+        - name: MQTT_BROKER
+          value: "tcp://hats.hcs.cn:1883"
+        - name: MQTT_CLIENT_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MQTT_TOPIC
+          value: "mtic/msg/client/realtime/tenant123/#"
+        - name: KAFKA_BROKERS
+          value: "iot-cluster-kafka-bootstrap.kafka:9092"
+        - name: TENANT_ID
+          value: "tenant123"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        livenessProbe:
+          exec:
+            command:
+            - pgrep
+            - bridge
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - pgrep
+            - bridge
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 3
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqtt-kafka-bridge
+  namespace: iot-bridge
+  labels:
+    app: mqtt-kafka-bridge
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: metrics
+  selector:
+    app: mqtt-kafka-bridge

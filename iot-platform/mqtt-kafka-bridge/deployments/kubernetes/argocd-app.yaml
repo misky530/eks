@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mqtt-kafka-bridge
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  
+  source:
+    repoURL: <YOUR_GIT_REPO>  # 替换为你的 Git 仓库
+    targetRevision: HEAD
+    path: mqtt-kafka-bridge/deployments/kubernetes
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: iot-bridge
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  
+  revisionHistoryLimit: 3
