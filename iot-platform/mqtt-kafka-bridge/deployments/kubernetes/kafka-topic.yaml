@@ -7,10 +7,10 @@ metadata:
     strimzi.io/cluster: iot-cluster
 spec:
   partitions: 6
-  replicas: 3
+  replicas: 1
   config:
     retention.ms: "259200000"
     compression.type: "snappy"
-    min.insync.replicas: "2"
+    min.insync.replicas: "1"
     segment.ms: "3600000"
     cleanup.policy: "delete"
