@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/misky530/eks # 替换为你的 Git 仓库
     targetRevision: HEAD
-    path: mqtt-kafka-bridge/deployments/kubernetes
+    path: iot-platform/mqtt-kafka-bridge/deployments/kubernetes
 
   destination:
     server: https://kubernetes.default.svc
