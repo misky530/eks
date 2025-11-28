@@ -63,3 +63,13 @@ latest: digest: sha256:474148bcfc85e1e3068871a517b74e804f9132d6129c0c97178b14e68
 4. 查看状态:
    kubectl get pods -n iot-bridge
    kubectl logs -f -n iot-bridge -l app=mqtt-kafka-bridge
+
+
+$ # 实时查看日志
+kubectl logs -n iot-bridge -l app=mqtt-kafka-bridge -f
+{"level":"info","ts":1764303910.4473343,"caller":"bridge/main.go:46","msg":"Starting MQTT-Kafka Bridge","mqtt_broker":"tcp://hats.hcs.cn:1883",
+"mqtt_topic":"mtic/msg/client/realtime/tenant123/#","kafka_brokers":["iot-cluster-kafka-bootstrap.kafka:9092"]}
+{"level":"info","ts":1764303914.2803757,"caller":"bridge/main.go:128","msg":"MQTT connected, subscribing to topic","topic":"mtic/msg/client/rea
+ltime/tenant123/#"}
+{"level":"info","ts":1764303914.2803807,"caller":"bridge/main.go:107","msg":"Connected to MQTT broker"}
+{"level":"info","ts":1764303914.5329292,"caller":"bridge/main.go:137","msg":"Successfully subscribed to MQTT topic"}
