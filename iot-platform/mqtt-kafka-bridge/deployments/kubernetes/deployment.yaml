@@ -11,7 +11,7 @@ metadata:
   labels:
     app: mqtt-kafka-bridge
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: mqtt-kafka-bridge
