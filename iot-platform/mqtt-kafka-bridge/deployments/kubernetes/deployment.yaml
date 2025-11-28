@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: bridge
-        image: 645890933537.dkr.ecr.us-east-1.amazonaws.com/mqtt-kafka-bridge/mqtt-kafka-bridge:latest
+        image: 645890933537.dkr.ecr.us-east-1.amazonaws.com/mqtt-kafka-bridge:latest
         imagePullPolicy: Always
         env:
         - name: MQTT_BROKER
