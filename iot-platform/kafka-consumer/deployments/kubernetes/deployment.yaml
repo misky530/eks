@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-consumer
+  namespace: iot-bridge
+  labels:
+    app: kafka-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-consumer
+  template:
+    metadata:
+      labels:
+        app: kafka-consumer
+    spec:
+      containers:
+      - name: consumer
+        image: 645890933537.dkr.ecr.us-east-1.amazonaws.com/kafka-consumer:latest
+        imagePullPolicy: Always
+        env:
+        - name: KAFKA_BROKERS
+          value: "iot-cluster-kafka-bootstrap.kafka:9092"
+        - name: KAFKA_TOPIC
+          value: "iot-messages"
+        - name: DB_HOST
+          value: "iot-platform-db.csj0i6cgwcpx.us-east-1.rds.amazonaws.com"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: "iot_data"
+        - name: DB_USER
+          value: "postgres"
+        - name: DB_PASSWORD
+          value: "IotPlatform2025!"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
